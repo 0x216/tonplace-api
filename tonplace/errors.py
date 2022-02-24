@@ -1,4 +1,4 @@
-class TonPlaceError():
+class TonPlaceError(Exception):
     """Base class for TonPlace errors"""
 
     @property
