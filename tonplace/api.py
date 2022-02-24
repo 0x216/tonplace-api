@@ -1,11 +1,8 @@
 import json
-from urllib import response
-from weakref import proxy
-from wsgiref import headers
 from aiohttp import ClientSession
-from typing import Any, Optional, Dict
+from typing import Any, Optional
 from .errors import TonPlaceError
-from aiohttp_socks import ProxyType, ProxyConnector, ChainProxyConnector
+from aiohttp_socks import ProxyConnector
 
 
 BASE_API = "https://api.ton.place/"
