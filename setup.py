@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 import tonplace
 
-setup(name='tonplace-api',
+setup(name='tonplace',
       version=tonplace.__version__,
       description='Python Distribution Utilities',
       author='0x216',
