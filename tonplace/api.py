@@ -1,5 +1,6 @@
 import io
 import json
+from retrying import retry
 from aiohttp import ClientSession
 from typing import Any, Union, Optional
 
@@ -29,6 +30,7 @@ class API:
         self.session = ClientSession(headers=self.headers,
                                     connector=self.connector)
 
+    @retry(wait_exponential_multiplier=1000, wait_exponential_max=10000, stop_max_delay=60000)
     async def request(
         self,
         method: str,
@@ -42,6 +44,7 @@ class API:
             data=data,
             json=json_data,
         )
+        
         if response.status >= 500:
             raise TonPlaceError('Site is down')
         try:
