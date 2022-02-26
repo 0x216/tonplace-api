@@ -1,6 +1,6 @@
 import io
 import json
-from retrying import retry
+from tenacity import retry, wait_fixed, stop_after_delay, stop_after_attempt
 from aiohttp import ClientSession
 from typing import Any, Union, Optional
 
@@ -30,7 +30,7 @@ class API:
         self.session = ClientSession(headers=self.headers,
                                     connector=self.connector)
 
-    @retry(wait_exponential_multiplier=1000, wait_exponential_max=10000, stop_max_delay=60000)
+    @retry(wait=wait_fixed(3), stop=(stop_after_delay(10) | stop_after_attempt(5)))
     async def request(
         self,
         method: str,
