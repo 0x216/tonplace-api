@@ -66,6 +66,15 @@ class API:
         user = await self.request("POST", path="main/init")
         return user
 
+    async def get_user(self, user_id: int):
+        """
+        User info
+        :param user_id:
+        :return:
+        """
+        user = await self.request("POST", path=f"profile/{user_id}")
+        return user
+
     async def get_group(self, group_id: int):
         """
         Group info
