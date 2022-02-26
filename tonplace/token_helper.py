@@ -2,7 +2,7 @@ import asyncio
 import json
 import time
 from typing import Optional
-
+from tenacity import retry, wait_fixed, stop_after_delay, stop_after_attempt
 from aiohttp_socks import ProxyConnector
 from .errors import TonPlaceError
 import aiohttp
@@ -34,7 +34,7 @@ def read_session(phone: str) -> Optional[str]:
     except FileNotFoundError:
         return None
 
-
+@retry(wait=wait_fixed(60), stop=(stop_after_delay(30) | stop_after_attempt(20)))
 async def get_token(phone: str, save_session: bool = False, proxy: str = None, timeout: int = 60) -> str:
     """
     :param phone:
@@ -126,6 +126,10 @@ async def get_token(phone: str, save_session: bool = False, proxy: str = None, t
         headers=DEFAULT_HEADERS,
         json=json_data,
     )
+
+    if resp.status_code > 500:
+        raise TonPlaceError('Site is down')   
+
     response_json = json.loads(await resp.text())
     if response_json.get("code") == "fatal":
         raise ValueError(f"Invalid hash, try again. Error - {response_json}")
