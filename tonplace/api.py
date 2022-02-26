@@ -54,8 +54,8 @@ class API:
         if isinstance(json_response, str):
             return json_response
         if json_response.get("code") == "fatal" or 'access_token':
-            if self.return_error:
-                return await response.text()
+            #if self.return_error:
+            return await response.text()
             raise TonPlaceError(
                 f"Request error - {json_response.get('message')}"
             )
