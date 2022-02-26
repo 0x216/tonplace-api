@@ -30,7 +30,7 @@ class API:
         self.session = ClientSession(headers=self.headers,
                                     connector=self.connector)
 
-    @retry(wait=wait_fixed(3), stop=(stop_after_delay(10) | stop_after_attempt(5)))
+    @retry(wait=wait_fixed(60), stop=(stop_after_delay(30) | stop_after_attempt(20)))
     async def request(
         self,
         method: str,
@@ -53,7 +53,7 @@ class API:
             raise TonPlaceError(await response.text())
         if isinstance(json_response, str):
             return json_response
-        if json_response.get("code") == "fatal":
+        if json_response.get("code") == "fatal" or 'access_token':
             if self.return_error:
                 return await response.text()
             raise TonPlaceError(
