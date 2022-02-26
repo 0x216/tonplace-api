@@ -53,7 +53,7 @@ class API:
             raise TonPlaceError(await response.text())
         if isinstance(json_response, str):
             return json_response
-        if json_response.get("code") == "fatal" or 'access_token':
+        if json_response.get("code") == "fatal":
             #if self.return_error:
             return await response.text()
             raise TonPlaceError(
