@@ -3,7 +3,7 @@ import json
 from tenacity import retry, wait_fixed, stop_after_delay, stop_after_attempt
 from aiohttp import ClientSession
 from typing import Any, Union, Optional
-
+from loguru import logger
 import aiohttp
 from .errors import TonPlaceError
 from aiohttp_socks import ProxyConnector
@@ -21,6 +21,13 @@ class API:
         self.proxy = proxy
         self.connector = None
         self.headers = {
+            "Host": "api.ton.place",
+            "User-Agent": " Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0",
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Language": "en",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Origin": "https://ton.place",
+            "Referer": "https://ton.place/",
             "Content-Type": "application/json",
             "Accept-Language": "en-US,en;q=0.5",
             "Authorization": token,  
@@ -46,6 +53,7 @@ class API:
         )
         
         if response.status >= 500:
+            logger.error(f"Error {response.status}")
             raise TonPlaceError('Site is down')
         try:
             json_response = json.loads(await response.text())
