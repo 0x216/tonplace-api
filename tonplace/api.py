@@ -1,6 +1,5 @@
 import io
 import json
-from tenacity import retry, wait_fixed, stop_after_delay, stop_after_attempt
 from aiohttp import ClientSession
 from typing import Any, Union, Optional
 from loguru import logger
@@ -37,7 +36,6 @@ class API:
         self.session = ClientSession(headers=self.headers,
                                     connector=self.connector)
 
-    @retry(wait=wait_fixed(60), stop=(stop_after_delay(30) | stop_after_attempt(20)))
     async def request(
         self,
         method: str,
