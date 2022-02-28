@@ -16,7 +16,7 @@ class API:
             token: str, 
             proxy: Optional[str] = None):
         self.base_path = BASE_API
-        self.token = token
+        self.token = token.strip('\n')
         self.proxy = proxy
         self.connector = None
         self.headers = {
@@ -29,7 +29,7 @@ class API:
             "Referer": "https://ton.place/",
             "Content-Type": "application/json",
             "Accept-Language": "en-US,en;q=0.5",
-            "Authorization": token,  
+            "Authorization": self.token,  
         }
         if self.proxy:
             self.connector = ProxyConnector.from_url(self.proxy)
